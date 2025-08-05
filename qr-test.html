@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>QR Test</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+  <h1>QR読み取りテスト</h1>
+  <div id="reader" style="width: 300px;"></div>
+
+  <script>
+  function onScanSuccess(decodedText, decodedResult) {
+      console.log(`✅ QRコード読み取り成功: ${decodedText}`);
+      setTimeout(() => {
+          // ここでLaravelのエンドポイントにPOSTリクエストを送ることも可能
+          // 例: fetch('/camera/upload', { method: 'POST', body: JSON.stringify({ text: decodedText }) });
+      alert("読み込み成功: " + decodedText);
+      // ここでLaravelのエンドポイントに送信もOK
+    }, 50);
+  }
+
+  const html5QrCode = new Html5Qrcode("reader");
+
+  Html5Qrcode.getCameras().then(devices => {
+      if (devices && devices.length) {
+          const cameraId = devices[0].id;
+          html5QrCode.start(
+              cameraId,
+              {
+                  fps: 10,
+                  qrbox: {
+                      width: 250,
+                      height: 250
+                  },
+                  // ✅ ハイライト用オプション
+                  rememberLastUsedCamera: true,
+                  aspectRatio: 1.0,
+                  showTorchButtonIfSupported: true
+              },
+              onScanSuccess
+          );
+      }
+  }).catch(err => {
+      console.error("カメラの取得エラー", err);
+  });
+</script>
+</body>
+</html>
