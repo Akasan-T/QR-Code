@@ -17,3 +17,26 @@ Schema::create('qr_tokens', function (Blueprint $table) {
     $table->timestamps();
 });
 ```
+```
+┌──────────────┐            ┌──────────────┐
+│   users      │            │   stores     │
+├──────────────┤            ├──────────────┤
+│ id           │◄────────┐  │ id           │
+│ name         │         │  │ name         │
+│ email        │         │  │ ...          │
+│ password     │         │  └──────────────┘
+│ qr_uuid      │         │
+│ exp          │         │
+│ ...          │         │
+└──────────────┘         │
+                         │
+                         │
+         ┌──────────────▼─────────────┐
+         │        visit_logs           │
+         ├─────────────────────────────┤
+         │ id                          │
+         │ user_id     (FK → users.id) │
+         │ store_id    (FK → stores.id)│
+         │ visited_at                  │
+         └─────────────────────────────┘
+```
